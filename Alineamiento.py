@@ -30,6 +30,7 @@ class Alineamiento:
         data=0
         cerosY=0
         i=j=0
+        indexX=indexY=0
         for value in self.secuenciaY:
             self.matrizParcial[i]={}
             #agrega valores en x segun la pocision y
@@ -41,10 +42,12 @@ class Alineamiento:
             # valor 0 en Y=0
             cerosY += -5
             data=cerosY
+            indexX=j
+            indexY=i
             i+=1
             j=0
 
-        return self.armarAlineamiento(i,j)
+        return self.armarAlineamiento(indexY-1,indexX-1)
 
     #arma el alineamiento
     def armarAlineamiento(self,i,j):
@@ -87,21 +90,27 @@ class Alineamiento:
 
     #busca el caracter que se alinea mejor
     def buscarDato(self,i,j):
+        if i<0: i=0
+        if j < 0: j = 0
+        #print(i,j,self.secuenciaY[2])
         posY=self.secuenciaY[i]
         posX=self.secuenciaX[j]
-        diagonal=self.matrizParcial[i-1][j-1]+self.matrizScore[posY+posX]
-        arriba = self.matrizParcial[i - 1][j] + self.matrizScore[posY + posX]
+        if i>0 and j>0: diagonal=self.matrizParcial[i-1][j-1]+self.matrizScore[posY+posX]
+        else: diagonal=0
+
+        if i>0: arriba = self.matrizParcial[i - 1][j] + self.matrizScore[posY + posX]
+        else: arriba=0
 
         if diagonal==self.matrizParcial[i][j]:
             return [posY,posX,i-1,j-1]
         elif arriba==self.matrizParcial[i][j]:
-            return [posY,'_', i-1, j]
+            return [posY,'-', i-1, j]
         else:#derecha
-            return ['_', posX, i, j-1]
+            return ['-', posX, i, j-1]
 
 
 
 
 alin=Alineamiento()
-alin.preAlineamineto()
-print(alin.matrizParcial)
+data=alin.preAlineamineto()
+print(data)
