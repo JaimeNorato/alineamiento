@@ -113,4 +113,5 @@ class Alineamiento:
 
 alin=Alineamiento()
 data=alin.preAlineamineto()
-print(data)
+print(data[0].replace('0',''))
+print(data[1].replace('0',''))
