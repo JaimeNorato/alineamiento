@@ -32,7 +32,7 @@ class Archivo:
 
     #retorna el string de la linea espesificada como un array
     def toArray(self,index=0):
-        return list(self.data[index].replace('\n',''))
+        return list('0'+self.data[index].replace('\n',''))
 #
 #
 # arch=Archivo("adn2.txt")

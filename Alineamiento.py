@@ -25,24 +25,81 @@ class Alineamiento:
     #crea la matriz con las dos cadenas de adn, que permitira el alineamiento
     def preAlineamineto(self):
         self.matrizParcial={}
-        secuenciaX=self.cargarSecuencia(0)
-        secuenciaY=self.cargarSecuencia(1)
-        cerosX=0
+        self.secuenciaX=self.cargarSecuencia(0)
+        self.secuenciaY=self.cargarSecuencia(1)
+        data=0
         cerosY=0
-        for value in secuenciaY:
-            # agrega columna 0 en Y
-            if not value + "0" in self.matrizParcial:
-                cerosY+=-5
-                self.matrizParcial[value + "0"] = cerosY
+        i=j=0
+        for value in self.secuenciaY:
+            self.matrizParcial[i]={}
             #agrega valores en x segun la pocision y
-            for item in secuenciaX:
-                # agrega columna 0 en X
-                if not "0"+item in self.matrizParcial:
-                    cerosX+=-5
-                    self.matrizParcial["0"+item]=cerosX
+            for item in self.secuenciaX:
+                data = self.calcularDato(value,item,i,j,data)
+                self.matrizParcial[i][j] = data
+                j+=1
 
-                #peso de la combinacion
-                    # self.matrizParcial[value+item]=self.matrizScore[value+item]
+            # valor 0 en Y=0
+            cerosY += -5
+            data=cerosY
+            i+=1
+            j=0
+
+        return self.armarAlineamiento(i,j)
+
+    #arma el alineamiento
+    def armarAlineamiento(self,i,j):
+        arriba=""
+        abajo=""
+        data=self.buscarDato(i,j)
+        abajo=data[0]+abajo
+        arriba=data[1]+arriba
+        if data[2]>=0 or data[3]>=0:
+            cadenas=self.armarAlineamiento(data[2],data[3])
+            arriba=cadenas[0]+arriba
+            abajo=cadenas[1]+abajo
+
+        return [arriba,abajo]
+
+
+    #calcula el valor para posicion indicada
+    def calcularDato(self,posY,posX,i,j,dato):
+        # agrega columna 0 en X
+        if posY == '0' and posX=='0':
+            return 0
+        elif posY=='0':
+            return dato-5
+        elif posX == '0':
+            return dato
+        else:
+            diagonal=self.matrizParcial[i-1][j-1]+self.matrizScore[posY+posX]
+            arriba=self.matrizParcial[i-1][j]+self.matrizScore[posY+posX]
+            derecha=self.matrizParcial[i][j-1]+self.matrizScore[posY+posX]
+            #print('------------------------------------------------------------------------------------------------------')
+            #print(diagonal, self.matrizParcial[i - 1][j - 1], self.matrizScore[posY + posX])
+            #print(arriba, self.matrizParcial[i - 1][j], self.matrizScore[posY + posX])
+            #print(derecha, self.matrizParcial[i][j - 1], self.matrizScore[posY + posX])
+            if diagonal>=arriba and diagonal>=derecha:
+                return diagonal
+            elif arriba>=derecha:
+                return  arriba
+            else:
+                return derecha
+
+    #busca el caracter que se alinea mejor
+    def buscarDato(self,i,j):
+        posY=self.secuenciaY[i]
+        posX=self.secuenciaX[j]
+        diagonal=self.matrizParcial[i-1][j-1]+self.matrizScore[posY+posX]
+        arriba = self.matrizParcial[i - 1][j] + self.matrizScore[posY + posX]
+
+        if diagonal==self.matrizParcial[i][j]:
+            return [posY,posX,i-1,j-1]
+        elif arriba==self.matrizParcial[i][j]:
+            return [posY,'_', i-1, j]
+        else:#derecha
+            return ['_', posX, i, j-1]
+
+
 
 
 alin=Alineamiento()
