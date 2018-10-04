@@ -107,6 +107,10 @@ class Alineamiento:
         else:#derecha
             return ['-', posX, i, j-1]
 
+    def verMatrizParcial(self):
+        for columna in self.matrizParcial:
+            print(columna)
+
 
 
 #"adn1.txt"
@@ -122,6 +126,7 @@ print('Secuencia 2:')
 print('>>> '+str(alin.cargarSecuencia(1)))
 print('-------------------------------------------------------------------------')
 print('Alineneando..............................................................')
+alin.verMatrizParcial()
 print('-------------------------------------------------------------------------')
 print('Resultado de alineacion:')
 print('-------------------------------------------------------------------------')
