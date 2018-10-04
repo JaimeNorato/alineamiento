@@ -19,10 +19,18 @@ class Archivo:
 
     #lee y retorna el contenido de un archvo especificad
     def leer(self):
-        self.data=""
+        self.data={}
         archivo=self.abrir()
         if archivo:
-            self.data=archivo.readlines()
+            lines=archivo.readlines()
+            i=0
+            for line in lines:
+                indicador=list(line)
+                if indicador[0]=='>':
+                    self.data[i]=""
+                    i+=1
+                else:
+                    self.data[i-1]=self.data[i-1]+line
             self.cerrar(archivo)
         return self
 

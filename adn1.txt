@@ -1,2 +1,4 @@
+>
 ACCGTCTT
+>cadena2
 CGTCTT

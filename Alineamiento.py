@@ -2,8 +2,8 @@ from Archivo import Archivo
 
 class Alineamiento:
 
-    def __init__(self):
-        self.archivo=Archivo("adn1.txt")
+    def __init__(self,archivo):
+        self.archivo=Archivo(archivo)
         self.cargarData()
         self.matrizScore=dict({# a
             "AA":10,"AG":-1,"AC":-3,"AT":-4,
@@ -46,8 +46,8 @@ class Alineamiento:
             indexY=i
             i+=1
             j=0
-
-        return self.armarAlineamiento(indexY-1,indexX-1)
+        self.score=self.matrizParcial[indexY][indexX-1]
+        return self.armarAlineamiento(indexY,indexX-1)
 
     #arma el alineamiento
     def armarAlineamiento(self,i,j):
@@ -75,12 +75,10 @@ class Alineamiento:
             return dato
         else:
             diagonal=self.matrizParcial[i-1][j-1]+self.matrizScore[posY+posX]
-            arriba=self.matrizParcial[i-1][j]+self.matrizScore[posY+posX]
-            derecha=self.matrizParcial[i][j-1]+self.matrizScore[posY+posX]
-            #print('------------------------------------------------------------------------------------------------------')
-            #print(diagonal, self.matrizParcial[i - 1][j - 1], self.matrizScore[posY + posX])
-            #print(arriba, self.matrizParcial[i - 1][j], self.matrizScore[posY + posX])
-            #print(derecha, self.matrizParcial[i][j - 1], self.matrizScore[posY + posX])
+            #arriba=self.matrizParcial[i-1][j]+self.matrizScore[posY+posX]
+            arriba=self.matrizParcial[i-1][j]+(-5)
+            #derecha=self.matrizParcial[i][j-1]+self.matrizScore[posY+posX]
+            derecha=self.matrizParcial[i][j-1]+(-5)
             if diagonal>=arriba and diagonal>=derecha:
                 return diagonal
             elif arriba>=derecha:
@@ -98,7 +96,8 @@ class Alineamiento:
         if i>0 and j>0: diagonal=self.matrizParcial[i-1][j-1]+self.matrizScore[posY+posX]
         else: diagonal=0
 
-        if i>0: arriba = self.matrizParcial[i - 1][j] + self.matrizScore[posY + posX]
+        #if i>0: arriba = self.matrizParcial[i - 1][j] + self.matrizScore[posY + posX]
+        if i>0: arriba = self.matrizParcial[i - 1][j] + (-5)
         else: arriba=0
 
         if diagonal==self.matrizParcial[i][j]:
@@ -110,8 +109,24 @@ class Alineamiento:
 
 
 
-
-alin=Alineamiento()
+#"adn1.txt"
+cadena=input('Introduce ruta del archivo: ')
+alin=Alineamiento(cadena)
+print('-------------------------------------------------------------------------')
+print('Cargando cadenas')
 data=alin.preAlineamineto()
-print(data[0].replace('0',''))
-print(data[1].replace('0',''))
+print('-------------------------------------------------------------------------')
+print('Secuencia 1:')
+print('>>> '+str(alin.cargarSecuencia(0)))
+print('Secuencia 2:')
+print('>>> '+str(alin.cargarSecuencia(1)))
+print('-------------------------------------------------------------------------')
+print('Alineneando..............................................................')
+print('-------------------------------------------------------------------------')
+print('Resultado de alineacion:')
+print('-------------------------------------------------------------------------')
+print('<<< '+data[0].replace('0',''))
+print('<<< '+data[1].replace('0',''))
+print('Score: '+str(alin.score))
+print('-------------------------------------------------------------------------')
+print('Alineacion Finalizada')
